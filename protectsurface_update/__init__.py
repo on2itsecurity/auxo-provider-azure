@@ -13,15 +13,12 @@ import os
 # Acquire a credential object using managed identity for authentication.
 credential = DefaultAzureCredential()
 
-# Retrieve subscription ID from environment variable.
+# Retrieve environment variable.
 SUBSCRIPTION_ID = os.environ['SUBSCRIPTION_ID']
-
-# Retrieve api token from environment variable.
 API_TOKEN = os.environ['API_TOKEN']
-
 PROTECT_SURFACE_TAG = os.environ['PROTECT_SURFACE_TAG']
-
 API_URL = os.environ['API_URL']
+AUXO_PROVIDER_AZURE_ID = os.environ['AUXO_PROVIDER_AZURE_ID']
 
 # Obtain the management object for resources.
 compute_client = ComputeManagementClient(credential, SUBSCRIPTION_ID)
@@ -62,7 +59,7 @@ def add_resources_to_state():
         try:
             protectsurface_name = vm.tags[PROTECT_SURFACE_TAG]
         except (KeyError, TypeError) as error:
-            protectsurface_name = 'Undefined Resource'
+            protectsurface_name = 'Unidentified Resources'
         vm_id = vm.id
         location_name = vm.location
 
@@ -97,7 +94,7 @@ def add_resources_to_state():
         try:
             protectsurface_name = virtual_network.tags[PROTECT_SURFACE_TAG]
         except (KeyError, TypeError) as error:
-            protectsurface_name = 'Undefined Resource'
+            protectsurface_name = 'Unidentified Resources'
         virtual_network_id = virtual_network.id
         location_name = virtual_network.location
 
@@ -120,7 +117,7 @@ def add_resources_to_state():
                 try:
                     protectsurface_name = resource.tags[PROTECT_SURFACE_TAG]
                 except (KeyError, TypeError) as error:
-                    protectsurface_name = 'Undefined Resource'
+                    protectsurface_name = 'Unidentified Resources'
                 resource_id = resource.id
 
             protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_resource', resource_id)
@@ -151,7 +148,7 @@ def construct_state_body(protect_surface_name: str, state_contents: dict) -> dic
             content_type = k
             content = item[k]
 
-            state_api_input.append({'description' : f'{protect_surface_name} {content_type}', 'content_type' : content_type, 'content' : content})
+            state_api_input.append({'maintainer' : f'{AUXO_PROVIDER_AZURE_ID}', 'description' : f'{protect_surface_name} {content_type}', 'content_type' : content_type, 'content' : content})
     return state_api_input
 
 
@@ -286,8 +283,84 @@ def get_location_coords(location_name: str):
     else: 
         return 35.0,-40.0
 
+# api call to retrieve all states
+
+def get_states_api_call():
+    get_states_url = f'https://{API_URL}/v3/zerotrust/get-states'
+
+    headers={'Content-Type': 'application/json',                                      
+            'Authorization': f'Bearer {API_TOKEN}'}
+
+    get_states_response = requests.get(get_states_url,
+                                    headers=headers)
+
+    if get_states_response.status_code != 200:
+        logging.info(f'Error http: [{get_states_response.status_code}] States get request failed {get_states_response.content}')
+    else:
+        logging.info(f'State get request successful')
+
+    decoded_response = json.loads(get_states_response.content.decode('utf-8'))
+    return decoded_response
+
+# api call to retrieve the protect surface name from the protect surface id. The protect surface name which is equal to the state name is used by delete_unused_api_maintained_states to compare the list of api maintained states in Auxo with the ones in protectsurface_intended_state
+
+def get_protect_surface_name_by_id_api_call(protect_surface_id):
+    get_states_url = f'https://{API_URL}/v3/zerotrust/get-protectsurface?id={protect_surface_id}'
+
+    headers={'Content-Type': 'application/json',                                      
+            'Authorization': f'Bearer {API_TOKEN}'}
+
+
+    get__protect_surface_response = requests.get(get_states_url,
+                                    headers=headers)
+
+    if get__protect_surface_response.status_code != 200:
+        logging.info(f'Error http: [{get__protect_surface_response.status_code}] Protect surface get request failed {get__protect_surface_response.content}')
+    else:
+        logging.info(f'Protect surface get request successful')
+
+    decoded_response = json.loads(get__protect_surface_response.content.decode('utf-8'))
+    
+    return decoded_response['items'][0]['name']
+
+# api call to delete states
+
+def delete_state_by_id_api_call(state_name, state_id):
+    get_states_url = f'https://{API_URL}/v3/zerotrust/remove-state?id={state_id}'
+
+    headers={'Content-Type': 'application/json',                                      
+            'Authorization': f'Bearer {API_TOKEN}'}
+
+
+    delete_state_response = requests.post(get_states_url,
+                                    headers=headers)
+    if delete_state_response.status_code != 200:
+        logging.info(f'Error http: [{delete_state_response.status_code}] Failed to delete state {state_name}:{state_id} {delete_state_response.content}')
+    else:
+        logging.info(f'Successfully deleted state {state_name}:{state_id}')
+
+# Creates a dictionary of all the api maintained states in Auxo containing {state_name: state_id}
+
+def create_dictionary_of_api_maintained_states_in_auxo(list_of_states):
+    api_maintained_state_list = {}
+    for state in list_of_states['items']:
+        if state['maintainer'] == f'{AUXO_PROVIDER_AZURE_ID}':
+            state_name = get_protect_surface_name_by_id_api_call(state['protectsurface_id'])
+            api_maintained_state_list[state_name] = state['id']
+    return api_maintained_state_list
+
+# Compares the api maintained states in Auxo with the states that contain resources in Azure. If an api maintained state no longer has any resources then it will be deleted.
+
+def delete_unused_api_maintained_states(protectsurface_intended_state, api_maintained_state_list):
+    for state_name, state_id in api_maintained_state_list.items():
+        if state_name not in protectsurface_intended_state:
+            delete_state_by_id_api_call(state_name, state_id)
 
 def main(mytimer: func.TimerRequest) -> None:
     # Functions to create protect surface and states and execute api call to add them to Auxo
     protectsurface_intended_state = add_resources_to_state()
     prepare_api_body_and_execute_api_call(protectsurface_intended_state)
+    # Functions to find any api maintained states that are now empty due to changes to tags recorded in protectsurface_intended_state. The delete_unused_api_maintained_states function will delete these empty states if they are api maintained.
+    list_of_states = get_states_api_call()
+    api_maintained_state_list = create_dictionary_of_api_maintained_states_in_auxo(list_of_states)
+    delete_unused_api_maintained_states(protectsurface_intended_state, api_maintained_state_list)

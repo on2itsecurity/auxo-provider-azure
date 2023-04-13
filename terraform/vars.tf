@@ -46,3 +46,7 @@ variable "protect_surface_name" {
 }
 
 variable "deployment_identifier" {}
+
+variable "auxo_provider_azure_id" {
+    default = "auxo-provider-azure"
+}

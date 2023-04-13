@@ -50,4 +50,4 @@ The `protectsurface` tag (default) or the tag configured will be used to map the
 
 ## Known limitations
 
-- Currently every subscription should have its own function deployed.
+- Every subscription should have its own function deployed.

@@ -6,6 +6,8 @@ resource_group_name     = "auxo-provider-azure"
 location                = "westeurope"
 deployment_identifier   = "customername01"
 
+auxo_provider_azure_id  = "auxo_provider_azure_1" #Unique ID per deployment, so it is known, what states are maintained by the provider
+
 # Deployment identifier will be used to create the following unique names;
 # storage_account_name   = "saauxoproviderazure" + deployment_identifier
 # function_name          = "auxo-provider-azure" + deployment_identifier

@@ -93,10 +93,11 @@ resource "azurerm_linux_function_app" "fa_auxo_provider_azure" {
         FUNCTIONS_WORKER_RUNTIME = "python"       
         
         //Specific for AUXO-Provider-Azure
-        "SUBSCRIPTION_ID"       = var.subscription_id
-        "API_TOKEN"             = var.auxo_api_token
-        "API_URL"               = var.auxo_api_url
-        "PROTECT_SURFACE_TAG"   = var.portectsurface_tag
+        "SUBSCRIPTION_ID"        = var.subscription_id
+        "API_TOKEN"              = var.auxo_api_token
+        "API_URL"                = var.auxo_api_url
+        "PROTECT_SURFACE_TAG"    = var.portectsurface_tag
+        "AUXO_PROVIDER_AZURE_ID" = var.auxo_provider_azure_id
     }
 
     identity {
