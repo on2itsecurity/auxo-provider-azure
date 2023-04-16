@@ -346,15 +346,18 @@ def create_dictionary_of_api_maintained_states_in_auxo(list_of_states):
     for state in list_of_states['items']:
         if state['maintainer'] == f'{AUXO_PROVIDER_AZURE_ID}':
             state_name = get_protect_surface_name_by_id_api_call(state['protectsurface_id'])
-            api_maintained_state_list[state_name] = state['id']
+            api_maintained_state_list.setdefault(state_name, [])
+            api_maintained_state_list[state_name].append(state['id'])
     return api_maintained_state_list
 
 # Compares the api maintained states in Auxo with the states that contain resources in Azure. If an api maintained state no longer has any resources then it will be deleted.
 
 def delete_unused_api_maintained_states(protectsurface_intended_state, api_maintained_state_list):
-    for state_name, state_id in api_maintained_state_list.items():
+    for state_name in api_maintained_state_list:
+        logging.info(f'API maintained states: {api_maintained_state_list}')
         if state_name not in protectsurface_intended_state:
-            delete_state_by_id_api_call(state_name, state_id)
+            for state_id in api_maintained_state_list[state_name]:
+                delete_state_by_id_api_call(state_name, state_id)
 
 def main(mytimer: func.TimerRequest) -> None:
     # Functions to create protect surface and states and execute api call to add them to Auxo
