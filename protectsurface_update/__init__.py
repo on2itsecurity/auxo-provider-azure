@@ -63,7 +63,7 @@ def add_resources_to_state():
         vm_id = vm.id
         location_name = vm.location
 
-        protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_resource', vm_id)
+        protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_cloud', vm_id)
 
         # Finds public and private IP addresses by looking at the NICs attached to each VM and adds them to the state
         for interface in vm.network_profile.network_interfaces:
@@ -98,7 +98,7 @@ def add_resources_to_state():
         virtual_network_id = virtual_network.id
         location_name = virtual_network.location
 
-        protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_resource', virtual_network_id)
+        protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_cloud', virtual_network_id)
 
         for subnet in virtual_network.subnets:
             virtual_network_subnet = subnet.address_prefix
@@ -120,7 +120,7 @@ def add_resources_to_state():
                     protectsurface_name = 'Unidentified Resources'
                 resource_id = resource.id
 
-            protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_resource', resource_id)
+            protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_cloud', resource_id)
         
     return protectsurface_intended_state
 
