@@ -20,7 +20,7 @@
         "storageAccountType": {
             "type": "string"
         },
-        "auxo_provider_azure_id": {
+        "auxo_provider_azure_name": {
             "type": "string"
         }
     },
@@ -106,7 +106,7 @@
                         },
                         {
                             "name": "AUXO_PROVIDER_AZURE_ID",
-                            "value": "[parameters('auxo_provider_azure_id')]"
+                            "value": "[parameters('auxo_provider_azure_name')]"
                         }
                     ]
                 }

@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "principalId": {
+        "principal": {
             "type": "string"
         },
         "guidValue": {
@@ -21,7 +21,7 @@
             "name": "[variables('roleAssignmentName')]",
             "scope": "/",
             "properties": {
-                "principalId": "[parameters('principalId')]",
+                "principalId": "[parameters('principal')]",
                 "roleDefinitionId": "[variables('roleDefinitionId')]",
                 "principalType": "ServicePrincipal"
             }
