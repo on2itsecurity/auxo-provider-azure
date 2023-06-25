@@ -73,5 +73,5 @@ In the Azure portal
     * Check Monitor > Invocations and check the function is executing every 5 minutes
     * Check under Monitor > Logs to see real-time logs/output of the function
 
-!!! note
-	please note that for the first run, it can take 10 min.
+
+**_NOTE:_**	please note that for the first run, it can take 10 min.
