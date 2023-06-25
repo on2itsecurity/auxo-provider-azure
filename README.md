@@ -65,7 +65,7 @@ set default subscriptions:
 
 - Every subscription should have its own function deployed.
 
-### Validate
+## Validation
 
 In the Azure portal
 
