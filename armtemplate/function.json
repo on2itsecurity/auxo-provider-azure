@@ -22,6 +22,10 @@
         },
         "auxo_provider_azure_name": {
             "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         }
     },
     "variables": {
@@ -33,7 +37,7 @@
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
             "name": "[concat(parameters('functionAppName'),'-insights')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
             },
@@ -46,7 +50,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionAppName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "kind": "functionapp,linux",
             "identity": {
                 "type": "SystemAssigned"
@@ -121,7 +125,7 @@
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2022-03-01",
             "name": "[parameters('functionAppName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
             },
@@ -139,7 +143,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2022-05-01",
             "name": "[variables('storageAccountName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
             },
