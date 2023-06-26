@@ -156,7 +156,7 @@
     "outputs": {
         "principalId": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2022-03-01').identity.principalId]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2022-03-01','Full').identity.principalId]"
         }
     }
 }
