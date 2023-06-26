@@ -148,5 +148,11 @@
             },
             "kind": "Storage"
         }
-    ]
+    ],
+    "outputs": {
+        "principalId": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2022-03-01').identity.principalId]"
+        }
+    }
 }
