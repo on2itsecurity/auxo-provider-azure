@@ -1,6 +1,6 @@
 # permissions required: 
 
-To deploy the Auxo app the following permissions are required: 
+To deploy the AUXO app the following permissions are required: 
 
 
 - Contributor role in Azure Subscription: 

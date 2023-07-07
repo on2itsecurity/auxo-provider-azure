@@ -302,7 +302,7 @@ def get_states_api_call():
     decoded_response = json.loads(get_states_response.content.decode('utf-8'))
     return decoded_response
 
-# api call to retrieve the protect surface name from the protect surface id. The protect surface name which is equal to the state name is used by delete_unused_api_maintained_states to compare the list of api maintained states in Auxo with the ones in protectsurface_intended_state
+# api call to retrieve the protect surface name from the protect surface id. The protect surface name which is equal to the state name is used by delete_unused_api_maintained_states to compare the list of api maintained states in AUXO with the ones in protectsurface_intended_state
 
 def get_protect_surface_name_by_id_api_call(protect_surface_id):
     get_states_url = f'https://{API_URL}/v3/zerotrust/get-protectsurface?id={protect_surface_id}'
@@ -339,7 +339,7 @@ def delete_state_by_id_api_call(state_name, state_id):
     else:
         logging.info(f'Successfully deleted state {state_name}:{state_id}')
 
-# Creates a dictionary of all the api maintained states in Auxo containing {state_name: state_id}
+# Creates a dictionary of all the api maintained states in AUXO containing {state_name: state_id}
 
 def create_dictionary_of_api_maintained_states_in_auxo(list_of_states):
     api_maintained_state_list = {}
@@ -350,7 +350,7 @@ def create_dictionary_of_api_maintained_states_in_auxo(list_of_states):
             api_maintained_state_list[state_name].append(state['id'])
     return api_maintained_state_list
 
-# Compares the api maintained states in Auxo with the states that contain resources in Azure. If an api maintained state no longer has any resources then it will be deleted.
+# Compares the api maintained states in AUXO with the states that contain resources in Azure. If an api maintained state no longer has any resources then it will be deleted.
 
 def delete_unused_api_maintained_states(protectsurface_intended_state, api_maintained_state_list):
     for state_name in api_maintained_state_list:
@@ -360,7 +360,7 @@ def delete_unused_api_maintained_states(protectsurface_intended_state, api_maint
                 delete_state_by_id_api_call(state_name, state_id)
 
 def main(mytimer: func.TimerRequest) -> None:
-    # Functions to create protect surface and states and execute api call to add them to Auxo
+    # Functions to create protect surface and states and execute api call to add them to AUXO
     protectsurface_intended_state = add_resources_to_state()
     prepare_api_body_and_execute_api_call(protectsurface_intended_state)
     # Functions to find any api maintained states that are now empty due to changes to tags recorded in protectsurface_intended_state. The delete_unused_api_maintained_states function will delete these empty states if they are api maintained.
