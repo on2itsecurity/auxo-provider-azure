@@ -42,7 +42,7 @@ variable "portectsurface_tag" {
 
 //Name of the protect surface
 variable "protect_surface_name" {
-    default = "Auxo Provider Azure"
+    default = "AUXO Provider Azure"
 }
 
 variable "deployment_identifier" {}

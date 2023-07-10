@@ -18,4 +18,4 @@ auxo_provider_azure_id  = "auxo_provider_azure_1" #Unique ID per deployment, so 
 #app_service_plan_name  = "asp_auxo_provider_azure"
 #function_name          = "auxo-provider-azure" #Must be unique
 #protectsurface_tag     = "protectsurface"
-#protectsurface_name    = "Auxo Provider Azure"
+#protectsurface_name    = "AUXO Provider Azure"
