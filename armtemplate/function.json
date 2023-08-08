@@ -34,6 +34,47 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[variables('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "privateEndpointConnections": []
+                }
+            },
+            "kind": "StorageV2",
+            "tags": {
+                "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
+            },
+            "sku": {
+                "name": "[parameters('storageAccountType')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('functionAppName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
+            },
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y"
+            },
+            "properties": {
+                "reserved": true
+            }
+        },
+        {
             "type": "Microsoft.Insights/components",
             "apiVersion": "2020-02-02",
             "name": "[concat(parameters('functionAppName'),'-insights')]",
@@ -101,7 +142,7 @@
                             "value": "python"
                         },
                         {
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "name": "WEBSITE_USE_ZIP",
                             "value": "https://github.com/on2itsecurity/auxo-provider-azure/raw/main/deploy/functionapp.zip"
                         },
                         {
@@ -133,47 +174,7 @@
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ]
         },
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2022-03-01",
-            "name": "[parameters('functionAppName')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
-            },
-            "sku": {
-                "name": "Y1",
-                "tier": "Dynamic",
-                "size": "Y1",
-                "family": "Y"
-            },
-            "properties": {
-                "reserved": true
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2022-05-01",
-            "name": "[variables('storageAccountName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "minimumTlsVersion": "TLS1_2",
-                "networkAcls": {
-                    "bypass": "AzureServices",
-                    "defaultAction": "Allow",
-                    "virtualNetworkRules": [],
-                    "ipRules": [],
-                    "privateEndpointConnections": []
-                }
-            },
-            "kind": "StorageV2",
-            "tags": {
-                "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
-            },
-            "sku": {
-                "name": "[parameters('storageAccountType')]"
-            },
-        }
+
     ],
     "outputs": {
         "principalId": {
