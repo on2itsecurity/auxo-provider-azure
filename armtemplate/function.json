@@ -142,7 +142,7 @@
                             "value": "python"
                         },
                         {
-                            "name": "WEBSITE_USE_ZIP",
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
                             "value": "https://github.com/on2itsecurity/auxo-provider-azure/raw/main/deploy/functionapp.zip"
                         },
                         {
