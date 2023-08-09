@@ -107,7 +107,7 @@
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
                 "clientCertMode": "Optional",
                 "clientCertEnabled": false,
-                "httpsOnly": false,
+                "httpsOnly": true,
                 "redundancyMode": "None",
                 "siteConfig": {
                     "linuxFxVersion": "PYTHON|3.9",
