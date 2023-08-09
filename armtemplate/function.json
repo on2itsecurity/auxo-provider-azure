@@ -98,7 +98,8 @@
                 "type": "SystemAssigned"
             },
             "tags": {
-                "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]"
+                "[parameters('protectsurfaceTag')]": "[parameters('protectsurfaceValue')]",
+                "[format('hidden-link:{0}', resourceId('Microsoft.Web/sites', variables('applicationInsightsName')))]": "Resource"
             },
             "properties": {
                 "enabled": true,
@@ -142,10 +143,6 @@
                             "value": "python"
                         },
                         {
-                            "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "0"
-                        },
-                        {
                             "name": "SUBSCRIPTION_ID",
                             "value": "[subscription().subscriptionId]"
                         },
@@ -169,8 +166,8 @@
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
                 "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
+                "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ]
         },
