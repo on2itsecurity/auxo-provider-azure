@@ -166,9 +166,9 @@
                 }
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
-                "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                "[reference(resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))).resourceId]",
+                "[reference(resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))).resourceId]",
+                "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).resourceId]"
             ]
         },
         {
