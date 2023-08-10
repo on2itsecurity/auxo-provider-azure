@@ -119,6 +119,7 @@ def add_resources_to_state():
                 except (KeyError, TypeError) as error:
                     protectsurface_name = 'Unidentified Resources'
                 resource_id = resource.id
+                location_name = resource.location
 
             protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_cloud', resource_id)
         
