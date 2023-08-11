@@ -121,7 +121,7 @@ def add_resources_to_state():
                 resource_id = resource.id
                 location_name = resource.location
 
-            protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_cloud', resource_id)
+                protectsurface_intended_state = update_local_protectsurface_intended_state(protectsurface_intended_state, protectsurface_name, location_name, 'azure_cloud', resource_id)
         
     return protectsurface_intended_state
 
