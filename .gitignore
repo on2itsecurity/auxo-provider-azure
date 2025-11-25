@@ -1,0 +1,11 @@
+terraform/.terraform
+terraform/--query
+terraform/-n
+terraform/.terraform.lock.hcl
+terraform/lab.tfvars
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+build_out/
+.DS_Store
+deploy/functionapp.zip
+.vscode/

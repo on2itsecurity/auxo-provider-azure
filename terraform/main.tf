@@ -5,7 +5,7 @@ terraform {
     required_providers {
         azurerm = {
             source  = "hashicorp/azurerm"
-            version = "3.39.1"
+            version = "4.39.0"
         }
     }
 }
@@ -84,7 +84,7 @@ resource "azurerm_linux_function_app" "fa_auxo_provider_azure" {
         application_insights_key               = azurerm_application_insights.ai_auxo_provider_azure.instrumentation_key
         application_insights_connection_string = azurerm_application_insights.ai_auxo_provider_azure.connection_string
         application_stack {
-            python_version = "3.9"
+            python_version = "3.12"
         }
     }
 
